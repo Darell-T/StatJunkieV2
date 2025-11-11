@@ -1,8 +1,11 @@
+import { redis } from "@/lib/redis";
+
 export async function GET(request: Request) {
-  // need to cache, too many api calls
   try {
     const { searchParams } = new URL(request.url);
     const playerName = searchParams.get("Name");
+
+    console.log(`Searching for: ${playerName}`);
 
     if (!playerName) {
       return Response.json(
@@ -11,8 +14,8 @@ export async function GET(request: Request) {
       );
     }
 
-    // keep calling until playerid is found
     let foundPlayer = null;
+    let playerID = null;
 
     for (let teamID = 1; teamID <= 30; teamID++) {
       const response = await fetch(
@@ -20,23 +23,27 @@ export async function GET(request: Request) {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to get roster data");
+        throw new Error(`Failed to fetch team ${teamID} roster`);
       }
 
-      // from the roster we check if the name can be found
       const roster = await response.json();
 
-      const player = roster?.athletes?.find((athlete: any) =>
-        athlete.displayName.includes(playerName)
-      );
+      const player = roster?.athletes?.find((athlete: any) => {
+        return athlete.displayName
+          .toLowerCase()
+          .includes(playerName.toLowerCase());
+      });
 
       if (player) {
+        playerID = player.id;
+
         foundPlayer = player;
+        console.log(`Found: ${player.displayName} (ID: ${playerID})`);
+
         break;
       }
     }
 
-    // Check if we found a player
     if (!foundPlayer) {
       return Response.json(
         { error: `Player "${playerName}" not found` },
@@ -44,32 +51,29 @@ export async function GET(request: Request) {
       );
     }
 
-    // now we fetch full player stats
-
     const playerResponse = await fetch(
-      `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/athletes/${foundPlayer.id}`
+      `https://site.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/${playerID}`
     );
-    const playerData = await playerResponse.json();
 
-    const stats = playerData.athlete.statistics || [];
+    const playerData = await playerResponse.json();
+    const stats = playerData?.athlete?.statsSummary?.statistics || [];
+    // AM I USING THE CORRECT PATH NOW???????
+    console.log("Stats", stats); //YES
 
     const playerStats = {
-      name: playerData.athlete.displayName,
-      team: playerData.athlete.team.displayName,
-      headshot: playerData.athlete.headshot?.href,
-      avgPoints: stats.find((s: string) => s.name === "avgPoints")
+      name: playerData?.athlete?.displayName,
+      team: playerData.athlete?.team?.displayName || "Free Agent",
+      headshot: playerData?.athlete?.headshot?.href,
+      position: playerData?.athlete?.position?.displayName || "Unknown",
+      avgPoints: stats.find((s: any) => s.name === "avgPoints")?.displayValue,
+      avgRebounds: stats.find((s: any) => s.name === "avgRebounds")
         ?.displayValue,
-      avgRebounds: stats.find((s: string) => s.name === "avgRebounds")
-        ?.displayValue,
-      avgAssists: stats.find((s: string) => s.name === "avgAssists")
-        ?.displayValue,
-      fieldGoalPct: stats.find((s: string) => s.name === "fieldGoalPct")
+      avgAssists: stats.find((s: any) => s.name === "avgAssists")?.displayValue,
+      fieldGoalPct: stats.find((s: any) => s.name === "fieldGoalPct")
         ?.displayValue,
     };
 
-    return Response.json({
-      player: playerStats,
-    });
+    return Response.json({ player: playerStats });
   } catch (error) {
     console.error("Error:", error);
     return Response.json(
