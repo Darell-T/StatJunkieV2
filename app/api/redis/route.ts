@@ -1,32 +1,42 @@
 import { redis } from "@/lib/redis";
 
 export async function POST(req: Request) {
-  const {
-    playerName,
-    team,
-    position,
-    ppgAvg,
-    rebAvg,
-    assistsAvg,
-    fieldGoalPct,
-    headshot,
-  } = await req.json();
+  try {
+    const {
+      name,
+      team,
+      position,
+      ppgAvg,
+      rebAvg,
+      assistsAvg,
+      fieldGoalPct,
+      headshot,
+    } = await req.json();
 
-  const player = {
-    playerName,
-    team,
-    position,
-    ppgAvg,
-    rebAvg,
-    assistsAvg,
-    fieldGoalPct,
-    headshot,
-    createdAt: Date.now(),
-  };
+    const player = {
+      name,
+      team,
+      position,
+      ppgAvg,
+      rebAvg,
+      assistsAvg,
+      fieldGoalPct,
+      headshot,
+      createdAt: Date.now(),
+    };
 
-  await redis.set(`Player: ${player}`, JSON.stringify(player));
+    // this makes the player name the key
+    const key = `Player:${name}`;
 
-  return Response.json({
-    message: `Added: ${player}`,
-  });
+    // Save to Redis
+    await redis.set(key, JSON.stringify(player));
+
+    return Response.json({
+      message: `Player ${name} added successfully.`,
+      player,
+    });
+  } catch (error) {
+    console.error("Error adding player:", error);
+    return Response.json({ error: "Failed to add player" }, { status: 500 });
+  }
 }
