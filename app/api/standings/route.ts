@@ -1,8 +1,20 @@
 //standings route for eastern and western conference teams
+
+type Stat = {
+  name: string;
+  displayName: string;
+  shortDisplayName: string;
+  description: string;
+  abbreviation: string;
+  type: string;
+  value: number;
+  displayValue: string;
+};
+
 type Division = {
   name: string;
   standings: {
-    entries: TeamEntry[]; // stop using any you fool
+    entries: TeamEntry[];
   };
 };
 
@@ -13,7 +25,11 @@ type TeamEntry = {
     abbreviation: string;
     logos?: { href: string }[];
   };
-  stats: any[];
+  stats: Stat[];
+};
+
+type ConferenceResponse = {
+  children: Division[];
 };
 
 export async function GET() {
@@ -31,24 +47,29 @@ export async function GET() {
       throw new Error("Failed to fetch standings");
     }
 
-    const easternData = await easternResponse.json();
-    const westernData = await westernResponse.json();
-
-    Response.json({
-      eastern: easternData,
-      western: westernData,
-    });
+    const easternData: ConferenceResponse = await easternResponse.json();
+    const westernData: ConferenceResponse = await westernResponse.json();
 
     //create a function that formats the teams data that we need
-
     const formatTeams = (entries: TeamEntry[]) => {
       return entries.map((entry) => {
         const team = entry.team;
 
         const stats: Record<string, string | number> = {};
-        entry.stats.forEach((stat) => {
+        entry.stats.forEach((stat: Stat) => {
           stats[stat.name] = stat.value;
         });
+
+        // Find the stats from the original array
+        const avgPointsFor = entry.stats.find(
+          (s: Stat) => s.name === "avgPointsFor"
+        );
+        const avgPointsAgainst = entry.stats.find(
+          (s: Stat) => s.name === "avgPointsAgainst"
+        );
+        const pointDifference = entry.stats.find(
+          (s: Stat) => s.name === "differential"
+        );
 
         return {
           id: team.id,
@@ -59,11 +80,16 @@ export async function GET() {
           losses: stats.losses || "0",
           streak: Number(stats.streak) > 0 ? stats.streak : "0",
           gamesBack: Number(stats.gamesBack) > 0 ? stats.gamesBack : "0",
+          pointsPerGame: avgPointsFor ? Number(avgPointsFor.displayValue) : 0,
+          pointsAllowed: avgPointsAgainst
+            ? Number(avgPointsAgainst.displayValue)
+            : 0,
+          pointDiff: pointDifference ? Number(pointDifference.displayValue) : 0,
         };
       });
     };
 
-    //flatten the all divisions in the eastern conference
+    //flatten all divisions in the eastern conference
     const easternTeams = easternData.children.flatMap(
       (division: Division) => division.standings.entries
     );
@@ -76,7 +102,6 @@ export async function GET() {
     const formattedWestern = formatTeams(westernTeams);
 
     // sort the teams based on wins for the TABLES MAN
-
     const sortedEastern = [...formattedEastern].sort(
       (a, b) => Number(b.wins) - Number(a.wins)
     );

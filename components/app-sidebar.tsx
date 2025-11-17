@@ -46,6 +46,18 @@ type Team = {
   losses: string | number;
   streak: string | number;
   gamesBack: string | number;
+  pointsPerGame: number;
+  pointsAllowed: number;
+  pointDiff: number;
+};
+
+type SelectedTeam = {
+  name: string;
+  abbreviation: string;
+  logo: React.ComponentType;
+  wins: string | number;
+  losses: string | number;
+  pointDiff: number;
 };
 
 type ApiData = {
@@ -170,7 +182,14 @@ const data = {
   ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  onTeamSelect,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & {
+  onTeamSelect?: (team: SelectedTeam) => void;
+}) {
+  console.log("AppSidebar received onTeamSelect?", !!onTeamSelect); // ADD THIS LINE
+
   const [standings, setStandings] = useState<{
     eastern: Team[];
     western: Team[];
@@ -230,12 +249,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       losses: team.losses,
       url: "#",
       icon: NBAIcons[correctedEastAbbrev as keyof typeof NBAIcons],
+      name: team.name,
+      pointsPerGame: team.pointsPerGame,
+      pointsAllowed: team.pointsAllowed,
+      pointDiff: team.pointDiff,
     };
   });
 
   const correctWesternNames = {
     GS: "GSW",
-    SA: "WAS",
+    SA: "SAS",
     UTAH: "UTA",
     NO: "NOP",
   };
@@ -253,6 +276,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       losses: team.losses,
       url: "#",
       icon: NBAIcons[correctedWestAbbrev as keyof typeof NBAIcons],
+      name: team.name,
+      pointsPerGame: team.pointsPerGame,
+      pointsAllowed: team.pointsAllowed,
+      pointDiff: team.pointDiff,
     };
   });
 
@@ -275,9 +302,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroupLabel>Eastern Conference</SidebarGroupLabel>
-        <NavMain items={easternNavItems} />
+        <NavMain items={easternNavItems} onTeamClick={onTeamSelect} />
         <SidebarGroupLabel>Western Conference</SidebarGroupLabel>
-        <NavSecondary items={westernNavItems} className="mt-auto" />
+        <NavSecondary
+          items={westernNavItems}
+          onTeamClick={onTeamSelect}
+          className="mt-auto"
+        />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
