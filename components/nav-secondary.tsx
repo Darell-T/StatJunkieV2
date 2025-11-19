@@ -3,7 +3,6 @@
 import * as React from "react";
 import { LucideIcon } from "lucide-react";
 import * as NBAIcons from "react-nba-logos";
-import type { NBALogo } from "react-nba-logos";
 
 import {
   SidebarGroup,
@@ -12,17 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
-type SelectedTeam = {
-  name: string;
-  abbreviation: string;
-  logo: React.ComponentType;
-  wins: string | number;
-  losses: string | number;
-  pointsPerGame?: number;
-  pointsAllowed?: number;
-  pointDiff?: number;
-};
+import type { SelectedTeam } from "@/app/types/components";
 
 export function NavSecondary({
   items,
@@ -30,6 +19,7 @@ export function NavSecondary({
   ...props
 }: {
   items: {
+    id?: string; // ADD THIS
     icon?: LucideIcon | (typeof NBAIcons)[keyof typeof NBAIcons];
     rank?: number;
     abbreviation?: string;
@@ -45,16 +35,18 @@ export function NavSecondary({
   onTeamClick?: (team: SelectedTeam) => void;
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   const handleTeamClick = (item: (typeof items)[0]) => {
-    if (onTeamClick && item.abbreviation && item.icon) {
+    // Added item.id check
+    if (onTeamClick && item.abbreviation && item.icon && item.id) {
       onTeamClick({
+        id: item.id, // ADD THIS
         name: item.name || item.abbreviation,
         abbreviation: item.abbreviation,
         logo: item.icon,
         wins: item.wins || 0,
         losses: item.losses || 0,
-        pointsPerGame: item.pointsPerGame || 0,
-        pointsAllowed: item.pointsAllowed || 0,
-        pointDiff: item.pointDiff || 0,
+        pointsPerGame: item.pointsPerGame,
+        pointsAllowed: item.pointsAllowed,
+        pointDiff: item.pointDiff,
       });
     }
   };

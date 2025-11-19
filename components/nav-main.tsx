@@ -1,4 +1,4 @@
-import { MailIcon, PlusCircleIcon, type LucideIcon } from "lucide-react";
+import { MailIcon, UserStarIcon, type LucideIcon } from "lucide-react";
 import * as NBAIcons from "react-nba-logos";
 
 import { Button } from "@/components/ui/button";
@@ -9,21 +9,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
-type SelectedTeam = {
-  name: string;
-  abbreviation: string;
-  logo: React.ComponentType;
-  wins: string | number;
-  losses: string | number;
-  pointsPerGame?: number;
-  pointsAllowed?: number;
-};
+import type { SelectedTeam } from "@/app/types/components";
 export function NavMain({
   items,
   onTeamClick,
 }: {
   items: {
+    id?: string;
     icon?: LucideIcon | (typeof NBAIcons)[keyof typeof NBAIcons];
     rank?: number;
     abbreviation?: string;
@@ -43,8 +35,10 @@ export function NavMain({
     console.log("Team clicked:", item);
     console.log("onTeamClick exists?", !!onTeamClick);
 
-    if (onTeamClick && item.abbreviation && item.icon) {
+    // Add item.id to the check
+    if (onTeamClick && item.abbreviation && item.icon && item.id) {
       const teamData = {
+        id: item.id, // Now TypeScript knows item.id is definitely a string here
         name: item.name || item.abbreviation,
         abbreviation: item.abbreviation,
         logo: item.icon,
@@ -67,8 +61,8 @@ export function NavMain({
               tooltip="Quick Create"
               className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
             >
-              <PlusCircleIcon />
-              <span>Brainstorming</span>
+              <UserStarIcon />
+              <span>View Favorites</span>
             </SidebarMenuButton>
             <Button
               size="icon"

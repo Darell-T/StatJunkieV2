@@ -1,68 +1,24 @@
 // app/api/recent-games/[teamId]/route.ts
 
 import { NextRequest } from "next/server";
-
-type TeamCompetitor = {
-  id: string;
-  homeAway: "home" | "away";
-  score: string;
-  winner?: boolean;
-  team: {
-    id: string;
-    displayName: string;
-    abbreviation: string;
-  };
-};
-
-type Competition = {
-  id: string;
-  date: string;
-  status: {
-    type: {
-      completed: boolean;
-      state: string;
-    };
-  };
-  competitors: TeamCompetitor[];
-};
-
-type Event = {
-  id: string;
-  date: string;
-  name: string;
-  competitions: Competition[];
-};
-
-type ScheduleResponse = {
-  team: {
-    id: string;
-    displayName: string;
-  };
-  events: Event[];
-};
-
-type Game = {
-  id: string;
-  won: boolean;
-  opponent: string;
-  opponentAbbreviation: string;
-  score: string;
-  date: string;
-  homeAway: "home" | "away";
-};
+import type {
+  TeamCompetitor,
+  EventForSchedule,
+  ScheduleResponse,
+  Game,
+} from "@/app/types/scores";
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ teamId: string }> } // Changed this line
+  context: { params: Promise<{ teamId: string }> }
 ) {
   try {
-    const { teamId } = await context.params; // Added await
+    const { teamId } = await context.params;
 
     console.log("Fetching games for team ID:", teamId);
 
-    // Get recent completed games from the schedule
     const scheduleResponse = await fetch(
-      `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/${teamId}/schedule?season=2025`,
+      `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/${teamId}/schedule?season=2026`,
       {
         next: { revalidate: 3600 },
       }
@@ -80,10 +36,9 @@ export async function GET(
 
     console.log("Total events:", scheduleData.events?.length);
 
-    // Get completed games
     const completedGames = scheduleData.events
       .filter(
-        (event: Event) =>
+        (event: EventForSchedule) =>
           event.competitions[0]?.status?.type?.completed === true
       )
       .slice(-5)
@@ -95,38 +50,55 @@ export async function GET(
       return Response.json([]);
     }
 
-    const formattedGames: Game[] = completedGames.map((event: Event) => {
-      const competition = event.competitions[0];
-      const homeTeam = competition.competitors.find(
-        (team: TeamCompetitor) => team.homeAway === "home"
-      );
-      const awayTeam = competition.competitors.find(
-        (team: TeamCompetitor) => team.homeAway === "away"
-      );
+    const formattedGames: Game[] = completedGames.map(
+      (event: EventForSchedule) => {
+        const competition = event.competitions[0];
+        const homeTeam = competition.competitors.find(
+          (team: TeamCompetitor) => team.homeAway === "home"
+        );
+        const awayTeam = competition.competitors.find(
+          (team: TeamCompetitor) => team.homeAway === "away"
+        );
 
-      if (!homeTeam || !awayTeam) {
-        throw new Error("Missing team data in competition");
+        if (!homeTeam || !awayTeam) {
+          throw new Error("Missing team data in competition");
+        }
+
+        const isHomeTeam = homeTeam.id === teamId;
+        const teamCompetitor = isHomeTeam ? homeTeam : awayTeam;
+        const opponentCompetitor = isHomeTeam ? awayTeam : homeTeam;
+
+        // Helper function to extract score
+        const getScore = (
+          score: string | number | { value: number; displayValue: string }
+        ): string => {
+          if (typeof score === "string") return score;
+          if (typeof score === "number") return String(score);
+          return score.displayValue;
+        };
+
+        const teamScore = getScore(teamCompetitor.score);
+        const opponentScore = getScore(opponentCompetitor.score);
+
+        console.log("Team score:", teamScore);
+        console.log("Opponent score:", opponentScore);
+
+        return {
+          id: event.id,
+          won: teamCompetitor.winner === true,
+          opponent: opponentCompetitor.team.displayName,
+          opponentAbbreviation: opponentCompetitor.team.abbreviation,
+          score: `${teamScore}-${opponentScore}`,
+          date: new Date(event.date).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+          }),
+          homeAway: isHomeTeam ? "home" : "away",
+        };
       }
+    );
 
-      const isHomeTeam = homeTeam.id === teamId;
-      const teamCompetitor = isHomeTeam ? homeTeam : awayTeam;
-      const opponentCompetitor = isHomeTeam ? awayTeam : homeTeam;
-
-      return {
-        id: event.id,
-        won: teamCompetitor.winner === true,
-        opponent: opponentCompetitor.team.displayName,
-        opponentAbbreviation: opponentCompetitor.team.abbreviation,
-        score: `${teamCompetitor.score}-${opponentCompetitor.score}`,
-        date: new Date(event.date).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-        }),
-        homeAway: isHomeTeam ? "home" : "away",
-      };
-    });
-
-    console.log("Formatted games:", formattedGames.length);
+    console.log("Formatted games:", formattedGames);
 
     return Response.json(formattedGames);
   } catch (error) {

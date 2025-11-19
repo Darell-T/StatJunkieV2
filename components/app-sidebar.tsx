@@ -36,34 +36,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { useState, useEffect } from "react";
-
-type Team = {
-  id: string;
-  name: string;
-  abbreviation: string;
-  logo: string | null;
-  wins: string | number;
-  losses: string | number;
-  streak: string | number;
-  gamesBack: string | number;
-  pointsPerGame: number;
-  pointsAllowed: number;
-  pointDiff: number;
-};
-
-type SelectedTeam = {
-  name: string;
-  abbreviation: string;
-  logo: React.ComponentType;
-  wins: string | number;
-  losses: string | number;
-  pointDiff: number;
-};
-
-type ApiData = {
-  message: string;
-  timestamp: number;
-};
+import type { Team, SelectedTeam } from "@/app/types/components";
 
 const data = {
   user: {
@@ -243,6 +216,7 @@ export function AppSidebar({
       ] || team.abbreviation;
 
     return {
+      id: team.id,
       rank: index + 1,
       abbreviation: correctedEastAbbrev,
       wins: team.wins,
@@ -270,6 +244,7 @@ export function AppSidebar({
       ] || team.abbreviation;
 
     return {
+      id: team.id,
       rank: index + 1,
       abbreviation: correctedWestAbbrev,
       wins: team.wins,
@@ -290,7 +265,7 @@ export function AppSidebar({
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <a href="#">
                 <ArrowUpCircleIcon className="h-5 w-5" />

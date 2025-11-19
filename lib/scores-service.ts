@@ -1,20 +1,9 @@
-type GameData = {
-  id: string;
-  homeTeam: string;
-  homeLogo: string;
-  awayTeam: string;
-  awayLogo: string;
-  homeScore: string;
-  awayScore: string;
-  homeLeader?: string;
-  awayLeader?: string;
-  homeLeaderImg?: string;
-  awayLeaderImg?: string;
-  arena?: string;
-  quarter?: number;
-  time?: string;
-  scheduledTime?: string;
-};
+import type {
+  Competitor,
+  Event,
+  ScoreboardResponse,
+  GameData,
+} from "@/app/types/scores";
 
 export async function fetchAndParseScores(): Promise<GameData[]> {
   const response = await fetch(
@@ -25,17 +14,17 @@ export async function fetchAndParseScores(): Promise<GameData[]> {
     throw new Error(`Error fetching scores! status: ${response.status}`);
   }
 
-  const data = await response.json();
+  const data: ScoreboardResponse = await response.json();
 
-  const gamesData = data?.events.map((event: any) => {
+  const gamesData = data?.events.map((event: Event) => {
     const competition = event.competitions?.[0];
     const competitors = competition?.competitors || [];
 
-    const homeTeam =
-      competitors.find((comp: any) => comp.homeAway === "home") ||
+    const homeTeam: Competitor | undefined =
+      competitors.find((comp: Competitor) => comp.homeAway === "home") ||
       competitors[0];
-    const awayTeam =
-      competitors.find((comp: any) => comp.homeAway === "away") ||
+    const awayTeam: Competitor | undefined =
+      competitors.find((comp: Competitor) => comp.homeAway === "away") ||
       competitors[1];
     const homeScore = competitors[0];
     const awayScore = competitors[1];
@@ -56,8 +45,10 @@ export async function fetchAndParseScores(): Promise<GameData[]> {
     return {
       id: event.id,
       homeTeam: homeTeam?.team?.displayName || "Unknown",
+      homeAbbreviation: homeTeam?.team?.abbreviation || "N/A",
       homeLogo: homeLogo?.team?.logo || "",
       awayTeam: awayTeam?.team?.displayName || "Unknown",
+      awayAbbreviation: awayTeam?.team?.abbreviation || "N/A",
       awayLogo: awayLogo?.team?.logo || "",
       homeScore: homeScore?.score || "0",
       awayScore: awayScore?.score || "0",

@@ -1,36 +1,11 @@
 //standings route for eastern and western conference teams
 
-type Stat = {
-  name: string;
-  displayName: string;
-  shortDisplayName: string;
-  description: string;
-  abbreviation: string;
-  type: string;
-  value: number;
-  displayValue: string;
-};
-
-type Division = {
-  name: string;
-  standings: {
-    entries: TeamEntry[];
-  };
-};
-
-type TeamEntry = {
-  team: {
-    id: string;
-    displayName: string;
-    abbreviation: string;
-    logos?: { href: string }[];
-  };
-  stats: Stat[];
-};
-
-type ConferenceResponse = {
-  children: Division[];
-};
+import type {
+  Stat,
+  Division,
+  TeamEntry,
+  ConferenceResponse,
+} from "@/app/types/standings";
 
 export async function GET() {
   try {
@@ -102,12 +77,17 @@ export async function GET() {
     const formattedWestern = formatTeams(westernTeams);
 
     // sort the teams based on wins for the TABLES MAN
-    const sortedEastern = [...formattedEastern].sort(
-      (a, b) => Number(b.wins) - Number(a.wins)
-    );
-    const sortedWestern = [...formattedWestern].sort(
-      (a, b) => Number(b.wins) - Number(a.wins)
-    );
+    const sortedEastern = [...formattedEastern].sort((a, b) => {
+      const aWinPct = Number(a.wins) / (Number(a.wins) + Number(a.losses));
+      const bWinPct = Number(b.wins) / (Number(b.wins) + Number(b.losses));
+      return bWinPct - aWinPct;
+    });
+
+    const sortedWestern = [...formattedWestern].sort((a, b) => {
+      const aWinPct = Number(a.wins) / (Number(a.wins) + Number(a.losses));
+      const bWinPct = Number(b.wins) / (Number(b.wins) + Number(b.losses));
+      return bWinPct - aWinPct;
+    });
 
     return Response.json({
       eastern: sortedEastern,

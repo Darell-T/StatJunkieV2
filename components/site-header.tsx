@@ -1,13 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-
-type SelectedTeam = {
-  name: string;
-  abbreviation: string;
-  logo: React.ComponentType;
-  wins: string | number;
-  losses: string | number;
-};
+import type { SelectedTeam } from "@/app/types/components";
 
 export function SiteHeader({
   selectedTeam,
@@ -32,7 +25,7 @@ export function SiteHeader({
             </h1>
           </div>
         ) : (
-          <h1 className="text-base font-medium">Documents</h1>
+          <h1 className="text-base font-medium">Select a team</h1>
         )}
       </div>
     </header>
