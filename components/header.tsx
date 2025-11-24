@@ -8,7 +8,7 @@ import { ModeToggle } from "./mode-toggle";
 
 const menuItems = [
   { name: "Teams", href: "/teams" },
-  { name: "Players", href: "#link" },
+  { name: "Players", href: "/player-stats" },
   { name: "Scores", href: "/scores" },
   { name: "Favorites", href: "#link" },
 ];
