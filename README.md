@@ -26,19 +26,28 @@ A modern, real-time NBA statistics tracking application built with Next.js. Trac
   <tr>
     <td width="50%">
       <h4>📊 Dashboard Overview</h4>
-      <img src="./public/Adobe%20Express%20-%20dashboard-demo%20(1).gif" alt="Dashboard Demo" />
+      <video width="100%" controls loop muted>
+        <source src="./public/dashboard-demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
       <p><i>Real-time scores, favorite teams, and team stats at a glance</i></p>
     </td>
     <td width="50%">
       <h4>🔍 Player Search</h4>
-      <img src="./public/search-demo.gif" alt="Player Search Demo" />
+      <video width="100%" controls loop muted>
+        <source src="./public/PLAYER-SEARCH-DEMO%20-%20Made%20with%20Clipchamp.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
       <p><i>Fast autocomplete search with detailed player statistics for the current NBA season</i></p>
     </td>
   </tr>
   <tr>
     <td width="50%">
       <h4>🏀 Teams & Standings</h4>
-      <img src="./public/Adobe%20Express%20-%20Teams-demo.gif" alt="Teams Demo" />
+      <video width="100%" controls loop muted>
+        <source src="./public/Teams-demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
       <p><i>Browse all NBA teams and view conference standings</i></p>
     </td>
     <td width="50%">
@@ -232,35 +241,39 @@ StatJunkieV2/
 ## 🎯 Feature Details
 
 ### 🏀 Live Scores
+
 - Real-time game scores updated every minute during game hours (6 PM - 11 PM EST)
 - Visual indicators for live games, final scores, and scheduled games
 - Team logos and arena information
 - Quarter-by-quarter progress tracking
 
 ### 📊 Player Statistics
+
 - Search functionality with autocomplete
 - Comprehensive stats: points, rebounds, assists, field goal percentage
 - Player headshots and team affiliations
 - Current season statistics from ESPN API
 
 ### 🏆 Team Standings
+
 - Separate views for Eastern and Western conferences
 - Win/loss records and winning percentages
 - Team rankings and playoff positioning
 - Interactive team cards with logos
 
 ### ⭐ Favorites System
+
 - Personalized dashboard with saved teams and players
 - One-click add/remove functionality
 - Persistent storage with Supabase
 - User-specific data with Row Level Security
 
 ### 🔐 Authentication
+
 - Email/password registration and login
 - Google OAuth integration
 - Protected routes with Next.js middleware
 - Secure session management via Supabase Auth
-
 
 ### Configure Cron Jobs
 
@@ -301,6 +314,7 @@ This runs every minute once an NBA game has started.
 ### WebSocket Connection Issues
 
 If live scores aren't updating:
+
 - Verify Pusher credentials in `.env.local` match your Pusher dashboard
 - Check browser console for connection errors
 - Ensure WebSockets are enabled in your Pusher app settings
