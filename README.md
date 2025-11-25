@@ -20,51 +20,35 @@ A modern, real-time NBA statistics tracking application built with Next.js. Trac
 
 ## 🎥 Demo & Screenshots
 
-### 🎬 Interactive Demos
+### 📊 Dashboard Overview
 
-<table>
-  <tr>
-    <td width="50%">
-      <h4>📊 Dashboard Overview</h4>
-      <video width="100%" controls loop muted>
-        <source src="./public/dashboard-demo.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <p><i>Real-time scores, favorite teams, and team stats at a glance</i></p>
-    </td>
-    <td width="50%">
-      <h4>🔍 Player Search</h4>
-      <video width="100%" controls loop muted>
-        <source src="./public/PLAYER-SEARCH-DEMO%20-%20Made%20with%20Clipchamp.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <p><i>Fast autocomplete search with detailed player statistics for the current NBA season</i></p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <h4>🏀 Teams & Standings</h4>
-      <video width="100%" controls loop muted>
-        <source src="./public/Teams-demo.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <p><i>Browse all NBA teams and view conference standings</i></p>
-    </td>
-    <td width="50%">
-      <h4>🎮 Live Scores</h4>
-      <img src="./public/Screenshot%202025-11-25%20015035.png" alt="Live Scores" />
-      <p><i>Real-time game scores with status indicators</i></p>
-    </td>
-  </tr>
-</table>
+https://github.com/user-attachments/assets/8a4589f0-ab42-447b-a7cc-8e5b297fc40e
+
+_Real-time scores, favorite teams, and team stats at a glance_
+
+### 🔍 Player Search
+
+https://github.com/user-attachments/assets/3e7506b5-4ffe-43d7-958f-8362083ecaf7
+
+_Fast autocomplete search with detailed player statistics for the current NBA season_
+
+### 🏀 Teams & Standings
+
+https://github.com/user-attachments/assets/7eae05f8-3dd0-44cc-b57f-9c730b72e142
+
+_Browse all NBA teams and view conference standings_
+
+### 🎮 Live Scores
+
+![Live Scores](./public/Screenshot%202025-11-25%20015035.png)
+
+_Real-time game scores with status indicators_
 
 ### ⭐ Favorites Management
 
-<p align="center">
-  <img src="./public/Screenshot%202025-11-25%20015108.png" alt="Favorites Page" width="80%" />
-  <br>
-  <i>Personalized favorites dashboard for quick access to your teams and players</i>
-</p>
+![Favorites Page](./public/Screenshot%202025-11-25%20015108.png)
+
+_Personalized favorites dashboard for quick access to your teams and players_
 
 ## 🛠️ Tech Stack
 
