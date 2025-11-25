@@ -6,12 +6,6 @@ import {
   extractPlayerStats,
 } from "@/lib/players-service";
 
-//TOOK A LOT OF CREATIVITY TO GET THE CURRENT SEASON STATS
-
-/*NEED TO FIND A WAY TO SPEED UP THE FIRST PLAYER THAT IS SEARCHED TIME*/
-
-//you get a type, you get a type, EVERYONE GETS A TYPE!(opera reference)
-
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -23,8 +17,6 @@ export async function GET(request: Request) {
         { status: 400 }
       );
     }
-
-    console.log(`Searching for: ${playerName}`);
 
     // Check cache first
     const cached = await getCachedPlayer(playerName);

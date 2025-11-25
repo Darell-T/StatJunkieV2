@@ -13,12 +13,8 @@ export async function GET(request: Request) {
     let allPlayers: PlayerSummary[] = [];
 
     if (playersData) {
-      // CACHE HIT
-      // console.log("Search Index Cache HIT");
       allPlayers = playersData as unknown as PlayerSummary[];
     } else {
-      // CACHE MISS: We need to build the index (The "Hydration")
-      console.log("Search Index Cache MISS - Building from ESPN...");
       allPlayers = await buildPlayerIndex();
 
       // Save to Redis for 24 hours (86400 seconds)

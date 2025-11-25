@@ -1,20 +1,19 @@
 "use client";
 import Link from "next/link";
-import { Logo } from "@/components/logo";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import React from "react";
+import { Home, Menu, X } from "lucide-react";
+import { useState } from "react";
 import { ModeToggle } from "./mode-toggle";
+import { UserMenu } from "./user-menu";
 
 const menuItems = [
   { name: "Teams", href: "/teams" },
   { name: "Players", href: "/player-stats" },
   { name: "Scores", href: "/scores" },
-  { name: "Favorites", href: "#link" },
+  { name: "Favorites", href: "/favorites" },
 ];
 
 export const HeroHeader = () => {
-  const [menuState, setMenuState] = React.useState(false);
+  const [menuState, setMenuState] = useState(false);
   return (
     <header>
       <nav
@@ -27,9 +26,10 @@ export const HeroHeader = () => {
               <Link
                 href="/"
                 aria-label="home"
-                className="flex items-center space-x-2"
+                className="flex items-center gap-2 text-foreground hover:text-orange-500 transition-colors"
               >
-                <Logo />
+                <Home className="size-6" />
+                <span className="font-bold text-lg hidden sm:inline">StatJunkie</span>
               </Link>
 
               <button
@@ -72,17 +72,8 @@ export const HeroHeader = () => {
                   ))}
                 </ul>
               </div>
-              <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                <Button asChild variant="outline" size="sm">
-                  <Link href="#">
-                    <span>Login</span>
-                  </Link>
-                </Button>
-                <Button asChild size="sm">
-                  <Link href="#">
-                    <span>Sign Up</span>
-                  </Link>
-                </Button>
+              <div className="flex w-full items-center gap-3 sm:flex-row sm:space-y-0 md:w-fit">
+                <UserMenu />
                 <ModeToggle />
               </div>
             </div>

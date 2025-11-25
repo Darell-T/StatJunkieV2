@@ -19,8 +19,6 @@ export async function GET(request: Request) {
       timestamp: new Date().toISOString(),
     });
 
-    console.log(`Broadcasted ${gamesData.length} games to Pusher`);
-
     return NextResponse.json({
       success: true,
       gamesCount: gamesData.length,

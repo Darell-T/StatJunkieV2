@@ -1,3 +1,5 @@
+"use client";
+
 import { Logo } from "@/components/logo";
 import Link from "next/link";
 import { Github, Linkedin } from "lucide-react";
@@ -38,25 +40,33 @@ export default function FooterSection() {
         </div>
 
         <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
-          <Link
-            href="https://github.com/yourusername/statjunkie"
+          <a
+            href="https://github.com/Darell-T"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="GitHub"
-            className="text-muted-foreground hover:text-primary block"
+            aria-label="GitHub Profile"
+            onClick={(e) => {
+              e.preventDefault();
+              window.open("https://github.com/Darell-T", "_blank", "noopener,noreferrer");
+            }}
+            className="text-muted-foreground hover:text-primary inline-flex items-center justify-center cursor-pointer transition-colors p-2 rounded-md hover:bg-muted/50"
           >
             <Github className="size-6" />
-          </Link>
+          </a>
 
-          <Link
-            href="https://linkedin.com/in/yourusername"
+          <a
+            href="https://www.linkedin.com/in/darell-thompson-1097691b1/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            className="text-muted-foreground hover:text-primary block"
+            aria-label="LinkedIn Profile"
+            onClick={(e) => {
+              e.preventDefault();
+              window.open("https://www.linkedin.com/in/darell-thompson-1097691b1/", "_blank", "noopener,noreferrer");
+            }}
+            className="text-muted-foreground hover:text-primary inline-flex items-center justify-center cursor-pointer transition-colors p-2 rounded-md hover:bg-muted/50"
           >
             <Linkedin className="size-6" />
-          </Link>
+          </a>
         </div>
 
         <span className="text-muted-foreground block text-center text-sm">

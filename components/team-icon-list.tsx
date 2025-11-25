@@ -5,8 +5,8 @@ import * as NBAIcons from "react-nba-logos";
 export default function TeamIconList() {
   // Create a named mapping of team icons
   const teamIcons = Object.entries(NBAIcons)
-    .filter(([key, value]) => typeof value === "function")
-    .map(([key, Icon]) => ({ name: key, Icon }));
+    .filter(([, value]) => typeof value === "function")
+    .map(([name, Icon]) => ({ name, Icon }));
 
   return (
     <div className="flex">

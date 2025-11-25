@@ -1,7 +1,6 @@
-import { MailIcon, UserStarIcon, type LucideIcon } from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 import * as NBAIcons from "react-nba-logos";
 
-import { Button } from "@/components/ui/button";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -10,6 +9,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import type { SelectedTeam } from "@/app/types/components";
+import { FavoriteButton } from "@/components/favorites/favorite-button";
 export function NavMain({
   items,
   onTeamClick,
@@ -32,13 +32,10 @@ export function NavMain({
 }) {
   const handleTeamClick = (e: React.MouseEvent, item: (typeof items)[0]) => {
     e.preventDefault();
-    console.log("Team clicked:", item);
-    console.log("onTeamClick exists?", !!onTeamClick);
 
-    // Add item.id to the check
     if (onTeamClick && item.abbreviation && item.icon && item.id) {
-      const teamData = {
-        id: item.id, // Now TypeScript knows item.id is definitely a string here
+      onTeamClick({
+        id: item.id,
         name: item.name || item.abbreviation,
         abbreviation: item.abbreviation,
         logo: item.icon,
@@ -47,33 +44,12 @@ export function NavMain({
         pointsPerGame: item.pointsPerGame,
         pointsAllowed: item.pointsAllowed,
         pointDiff: item.pointDiff,
-      };
-      console.log("Calling onTeamClick with:", teamData);
-      onTeamClick(teamData);
+      });
     }
   };
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
-        <SidebarMenu>
-          <SidebarMenuItem className="flex items-center gap-2">
-            <SidebarMenuButton
-              tooltip="Quick Create"
-              className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
-            >
-              <UserStarIcon />
-              <span>View Favorites</span>
-            </SidebarMenuButton>
-            <Button
-              size="icon"
-              className="h-9 w-9 shrink-0 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
-            >
-              <MailIcon />
-              <span className="sr-only">Inbox</span>
-            </Button>
-          </SidebarMenuItem>
-        </SidebarMenu>
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem
@@ -84,7 +60,7 @@ export function NavMain({
                 onClick={(e) => handleTeamClick(e, item)}
                 asChild={false}
               >
-                <div className="flex items-center gap-2 w-full">
+                <div className="flex items-center gap-2 w-full group">
                   {item.rank && <span>{item.rank}.</span>}
                   {item.icon && (
                     <div className="h-11 w-11">
@@ -98,6 +74,18 @@ export function NavMain({
                     </span>
                   )}
                   {item.title && <span>{item.title}</span>}
+                  {item.id && item.abbreviation && (
+                    <div className="ml-auto" onClick={(e) => e.stopPropagation()}>
+                      <FavoriteButton
+                        type="team"
+                        id={item.id}
+                        name={item.name || item.abbreviation}
+                        abbreviation={item.abbreviation}
+                        size="sm"
+                        asIcon={true}
+                      />
+                    </div>
+                  )}
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>

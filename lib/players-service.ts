@@ -39,9 +39,6 @@ async function fetchWithRetry(url: string, retries = 3): Promise<Response> {
       // Calculate wait time: 1s, 2s, 4s
       const waitTime = 1000 * Math.pow(2, attempt);
 
-      console.log(
-        `Attempt ${attempt + 1} failed, retrying in ${waitTime}ms...`
-      );
 
       // Wait before next attempt
       await new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -59,11 +56,6 @@ export async function getCachedPlayer(
   const cachedPlayer = await redis.get(key);
 
   if (cachedPlayer) {
-    // error logging because i like breaking stuff
-    console.log("Returning cached player data");
-    console.log("Type: ", typeof cachedPlayer);
-    console.log("Value: ", cachedPlayer);
-
     return { player: cachedPlayer as Player, source: "cache" };
   }
   return null;
@@ -108,7 +100,6 @@ export async function searchPlayerAcrossTeams(
     const player = await findPlayerInRoster(roster, playerName);
 
     if (player) {
-      console.log(`Found: ${player.displayName} (ID: ${player.id})`);
       return { player, playerID: player.id };
     }
   }

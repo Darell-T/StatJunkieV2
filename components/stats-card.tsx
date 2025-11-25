@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import type { Player } from "@/app/types/player";
 import { Trophy, Users, Target, Activity, Loader2 } from "lucide-react";
+import { FavoriteButton } from "@/components/favorites/favorite-button";
 
 interface StatsCardProps {
   player: Player | null;
@@ -69,9 +70,19 @@ export function StatsCard({
       <div className="bg-slate-900 p-6 pb-16 relative">
         <div className="flex justify-between items-start">
           <div>
-            <h2 className="text-3xl font-bold text-white tracking-tight">
-              {player.name}
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-3xl font-bold text-white tracking-tight">
+                {player.name}
+              </h2>
+              <FavoriteButton
+                type="player"
+                id={player.name}
+                name={player.name}
+                team={player.team}
+                size="sm"
+                className="text-white"
+              />
+            </div>
             <div className="flex items-center gap-2 text-slate-400 mt-1">
               <span className="font-semibold text-slate-200">
                 {player.team}
@@ -101,6 +112,8 @@ export function StatsCard({
                 <Image
                   src={player.headshot}
                   alt={player.name}
+                  width={192}
+                  height={192}
                   className="w-full h-full object-cover"
                 />
               ) : (

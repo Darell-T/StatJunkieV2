@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useCallback, useRef, useEffect } from "react";
 import Image from "next/image";
@@ -73,25 +72,20 @@ export function InputWithButton({ onPlayerSelect }: InputWithButtonProps) {
 
   return (
     <div className="w-full max-w-2xl relative" ref={searchRef}>
-      <div className="flex items-center gap-3">
-        <div className="relative flex-1">
-          <Input
-            type="text"
-            placeholder="Search player name..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => query && setIsOpen(true)}
-            className="w-full h-12 text-base"
-          />
-          {isLoading && (
-            <div className="absolute right-3 top-3">
-              <div className="animate-spin h-5 w-5 border-2 border-gray-300 border-t-gray-900 rounded-full" />
-            </div>
-          )}
-        </div>
-        <Button type="submit" variant="outline">
-          Search
-        </Button>
+      <div className="relative">
+        <Input
+          type="text"
+          placeholder="Search player name..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => query && setIsOpen(true)}
+          className="w-full h-12 text-base"
+        />
+        {isLoading && (
+          <div className="absolute right-3 top-3">
+            <div className="animate-spin h-5 w-5 border-2 border-gray-300 border-t-gray-900 rounded-full" />
+          </div>
+        )}
       </div>
 
       {/* Dropdown Results */}
