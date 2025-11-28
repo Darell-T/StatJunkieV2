@@ -371,7 +371,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **NBA Data:** Powered by [ESPN API](https://www.espn.com)
 - **UI Components:** [shadcn/ui](https://ui.shadcn.com)
-- **Team Logos:** [react-nba-logos](https://github.com/erikras/react-nba-logos)
+- **Team Logos:** [react-nba-logos](https://github.com/ChrisKatsaras/React-NBA-Logos)
 - **Icons:** [Lucide React](https://lucide.dev)
 
 ## 📧 Support & Contact
