@@ -22,33 +22,33 @@ A modern, real-time NBA statistics tracking application built with Next.js. Trac
 
 ### 📊 Dashboard Overview
 
-https://github.com/user-attachments/assets/8a4589f0-ab42-447b-a7cc-8e5b297fc40e
+https://github.com/user-attachments/assets/your-dashboard-video-id
 
-_Real-time scores, favorite teams, and team stats at a glance_
+*Real-time scores, favorite teams, and team stats at a glance*
 
 ### 🔍 Player Search
 
-https://github.com/user-attachments/assets/3e7506b5-4ffe-43d7-958f-8362083ecaf7
+https://github.com/user-attachments/assets/your-player-search-video-id
 
-_Fast autocomplete search with detailed player statistics for the current NBA season_
+*Fast autocomplete search with detailed player statistics for the current NBA season*
 
 ### 🏀 Teams & Standings
 
-https://github.com/user-attachments/assets/7eae05f8-3dd0-44cc-b57f-9c730b72e142
+https://github.com/user-attachments/assets/your-teams-video-id
 
-_Browse all NBA teams and view conference standings_
+*Browse all NBA teams and view conference standings*
 
 ### 🎮 Live Scores
 
 ![Live Scores](./public/Screenshot%202025-11-25%20015035.png)
 
-_Real-time game scores with status indicators_
+*Real-time game scores with status indicators*
 
 ### ⭐ Favorites Management
 
 ![Favorites Page](./public/Screenshot%202025-11-25%20015108.png)
 
-_Personalized favorites dashboard for quick access to your teams and players_
+*Personalized favorites dashboard for quick access to your teams and players*
 
 ## 🛠️ Tech Stack
 
@@ -259,6 +259,17 @@ StatJunkieV2/
 - Protected routes with Next.js middleware
 - Secure session management via Supabase Auth
 
+## 🚢 Deployment
+
+### Deploy to Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Import your repository in [Vercel](https://vercel.com/new)
+3. Configure environment variables in Vercel project settings
+4. Deploy!
+
+**Note:** The application will automatically redeploy on every push to your main branch.
+
 ### Configure Cron Jobs
 
 The app uses Vercel Cron Jobs to update scores. Ensure `vercel.json` is configured:
@@ -360,7 +371,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **NBA Data:** Powered by [ESPN API](https://www.espn.com)
 - **UI Components:** [shadcn/ui](https://ui.shadcn.com)
-- **Team Logos:** [react-nba-logos]([https://github.com/erikras/react-nba-logos](https://github.com/ChrisKatsaras/React-NBA-Logos))
+- **Team Logos:** [react-nba-logos](https://github.com/erikras/react-nba-logos)
 - **Icons:** [Lucide React](https://lucide.dev)
 
 ## 📧 Support & Contact
