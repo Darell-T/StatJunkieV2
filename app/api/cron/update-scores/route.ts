@@ -3,9 +3,15 @@ import { fetchAndParseScores } from "@/lib/scores-service";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  // Security: Only allow requests with correct secret
+  // Security: Only allow requests from Vercel Cron or with correct secret
+  const vercelCronHeader = request.headers.get("x-vercel-cron");
   const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+
+  // Allow if it's from Vercel Cron OR has valid Authorization header
+  const isVercelCron = vercelCronHeader === "1";
+  const hasValidSecret = authHeader === `Bearer ${process.env.CRON_SECRET}`;
+
+  if (!isVercelCron && !hasValidSecret) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

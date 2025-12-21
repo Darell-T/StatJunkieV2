@@ -64,23 +64,8 @@ export default function ScoresPage() {
       }
     );
 
-    // Auto-trigger updates every 15 seconds
-    const cronInterval = setInterval(async () => {
-      try {
-        await fetch("/api/cron/update-scores", {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET}`,
-          },
-        });
-        console.log("🔄 Triggered score update");
-      } catch (error) {
-        console.error("Error triggering update:", error);
-      }
-    }, 15000);
-
     // Cleanup
     return () => {
-      clearInterval(cronInterval);
       channel.unbind_all();
       channel.unsubscribe();
       pusher.disconnect();
