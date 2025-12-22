@@ -46,3 +46,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# large media files (use CDN or external hosting instead)
+# Demo videos - too large for git
+public/*demo*.mp4
+public/*demo*.gif
+public/*DEMO*.mp4
