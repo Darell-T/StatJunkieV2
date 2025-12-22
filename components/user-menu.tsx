@@ -71,7 +71,7 @@ export function UserMenu() {
             name: session.user.user_metadata?.full_name || 
                   session.user.user_metadata?.name ||
                   session.user.email?.split("@")[0],
-            avatar_url: avatarUrl,
+            avatar_url: avatarUrl ?? undefined,
           });
           setLoading(false);
         }
@@ -101,7 +101,7 @@ export function UserMenu() {
           name: currentUser.user_metadata?.full_name || 
                 currentUser.user_metadata?.name ||
                 currentUser.email?.split("@")[0],
-          avatar_url: avatarUrl,
+          avatar_url: avatarUrl ?? undefined,
         });
       } else {
         setUser(null);
