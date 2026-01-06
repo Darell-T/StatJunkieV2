@@ -9,10 +9,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "StatJunkie - Live Scores & Stats",
   description: "Real-time NBA scores and player statistics",
-  icons: {
-    icon: "/statjunkie-high-resolution-logo-transparent.png",
-    apple: "/statjunkie-high-resolution-logo-transparent.png",
-  },
 };
 
 export default function RootLayout({
