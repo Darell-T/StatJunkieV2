@@ -20,16 +20,20 @@ import { useRouter } from "next/navigation";
  * Helper to get avatar URL from user metadata
  * Prioritizes custom_avatar (user uploaded) over OAuth provider avatars
  */
-function getAvatarUrl(metadata: Record<string, unknown> | undefined): string | null {
+function getAvatarUrl(
+  metadata: Record<string, unknown> | undefined
+): string | null {
   if (!metadata) return null;
-  
+
   // Custom avatar takes priority (persists across OAuth sign-ins)
   if (metadata.custom_avatar) {
     return metadata.custom_avatar as string;
   }
-  
+
   // Fall back to OAuth provider avatar (Google uses both avatar_url and picture)
-  return (metadata.avatar_url as string) || (metadata.picture as string) || null;
+  return (
+    (metadata.avatar_url as string) || (metadata.picture as string) || null
+  );
 }
 
 /**
@@ -55,28 +59,29 @@ export function UserMenu() {
 
     // Subscribe to auth state changes for real-time updates
     const supabase = getSupabaseBrowserClient();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === "SIGNED_OUT" || !session) {
-          // Clear user state on sign out
-          setUser(null);
-          setLoading(false);
-        } else if (session?.user) {
-          // Update user state on sign in or token refresh
-          const avatarUrl = getAvatarUrl(session.user.user_metadata);
-          
-          setUser({
-            id: session.user.id,
-            email: session.user.email,
-            name: session.user.user_metadata?.full_name || 
-                  session.user.user_metadata?.name ||
-                  session.user.email?.split("@")[0],
-            avatar_url: avatarUrl ?? undefined,
-          });
-          setLoading(false);
-        }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT" || !session) {
+        // Clear user state on sign out
+        setUser(null);
+        setLoading(false);
+      } else if (session?.user) {
+        // Update user state on sign in or token refresh
+        const avatarUrl = getAvatarUrl(session.user.user_metadata);
+
+        setUser({
+          id: session.user.id,
+          email: session.user.email,
+          name:
+            session.user.user_metadata?.full_name ||
+            session.user.user_metadata?.name ||
+            session.user.email?.split("@")[0],
+          avatar_url: avatarUrl ?? undefined,
+        });
+        setLoading(false);
       }
-    );
+    });
 
     // Cleanup subscription on unmount
     return () => {
@@ -90,17 +95,20 @@ export function UserMenu() {
   const checkUser = async () => {
     try {
       const supabase = getSupabaseBrowserClient();
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      const {
+        data: { user: currentUser },
+      } = await supabase.auth.getUser();
 
       if (currentUser) {
         const avatarUrl = getAvatarUrl(currentUser.user_metadata);
-        
+
         setUser({
           id: currentUser.id,
           email: currentUser.email,
-          name: currentUser.user_metadata?.full_name || 
-                currentUser.user_metadata?.name ||
-                currentUser.email?.split("@")[0],
+          name:
+            currentUser.user_metadata?.full_name ||
+            currentUser.user_metadata?.name ||
+            currentUser.email?.split("@")[0],
           avatar_url: avatarUrl ?? undefined,
         });
       } else {
@@ -143,7 +151,9 @@ export function UserMenu() {
     setUploading(true);
     try {
       const supabase = getSupabaseBrowserClient();
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      const {
+        data: { user: currentUser },
+      } = await supabase.auth.getUser();
 
       if (!currentUser) {
         alert("Please sign in to upload an avatar");
@@ -159,9 +169,11 @@ export function UserMenu() {
       const { data: oldFiles } = await supabase.storage
         .from("avatars")
         .list(currentUser.id);
-      
+
       if (oldFiles && oldFiles.length > 0) {
-        const filesToDelete = oldFiles.map((f) => `${currentUser.id}/${f.name}`);
+        const filesToDelete = oldFiles.map(
+          (f) => `${currentUser.id}/${f.name}`
+        );
         await supabase.storage.from("avatars").remove(filesToDelete);
       }
 
@@ -180,9 +192,9 @@ export function UserMenu() {
       }
 
       // Get public URL for the uploaded file
-      const { data: { publicUrl } } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(filePath);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("avatars").getPublicUrl(filePath);
 
       // Save to custom_avatar field (won't be overwritten by OAuth providers)
       const { error: updateError } = await supabase.auth.updateUser({
@@ -196,8 +208,10 @@ export function UserMenu() {
       }
 
       // Update local state with cache-busting timestamp for immediate display
-      setUser((prev) => prev ? { ...prev, avatar_url: `${publicUrl}?t=${Date.now()}` } : null);
-      
+      setUser((prev) =>
+        prev ? { ...prev, avatar_url: `${publicUrl}?t=${Date.now()}` } : null
+      );
+
       // Reset file input for future uploads
       e.target.value = "";
     } catch (error) {
@@ -210,9 +224,7 @@ export function UserMenu() {
 
   // Show loading skeleton while checking auth state
   if (loading) {
-    return (
-      <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
-    );
+    return <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />;
   }
 
   // Show login/signup buttons if not authenticated
@@ -230,12 +242,15 @@ export function UserMenu() {
   }
 
   // Generate initials for avatar fallback
-  const initials = user.name
-    ?.split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2) || user.email?.slice(0, 2).toUpperCase() || "U";
+  const initials =
+    user.name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) ||
+    user.email?.slice(0, 2).toUpperCase() ||
+    "U";
 
   return (
     <>
@@ -247,7 +262,7 @@ export function UserMenu() {
         onChange={handleAvatarUpload}
         className="hidden"
       />
-      
+
       <DropdownMenu>
         {/* Avatar trigger button */}
         <DropdownMenuTrigger asChild>
@@ -258,7 +273,7 @@ export function UserMenu() {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        
+
         {/* Dropdown menu content */}
         <DropdownMenuContent className="w-56" align="end" forceMount>
           {/* User info header */}
@@ -270,9 +285,9 @@ export function UserMenu() {
               </p>
             </div>
           </DropdownMenuLabel>
-          
+
           <DropdownMenuSeparator />
-          
+
           {/* Navigation links */}
           <DropdownMenuItem asChild>
             <Link href="/favorites" className="cursor-pointer">
@@ -286,9 +301,9 @@ export function UserMenu() {
               <span>Dashboard</span>
             </Link>
           </DropdownMenuItem>
-          
+
           <DropdownMenuSeparator />
-          
+
           {/* Avatar upload button */}
           <DropdownMenuItem
             className="cursor-pointer"
@@ -298,9 +313,9 @@ export function UserMenu() {
             <Upload className="mr-2 h-4 w-4" />
             <span>{uploading ? "Uploading..." : "Change Avatar"}</span>
           </DropdownMenuItem>
-          
+
           <DropdownMenuSeparator />
-          
+
           {/* Sign out button */}
           <DropdownMenuItem
             className="cursor-pointer text-red-600 focus:text-red-600"
