@@ -2,7 +2,7 @@
 
 import { Logo } from "@/components/logo";
 import Link from "next/link";
-import { Github, Linkedin } from "lucide-react";
+import { Github } from "lucide-react";
 
 const links = [
   {
@@ -47,30 +47,20 @@ export default function FooterSection() {
             aria-label="GitHub Profile"
             onClick={(e) => {
               e.preventDefault();
-              window.open("https://github.com/Darell-T", "_blank", "noopener,noreferrer");
+              window.open(
+                "https://github.com/Darell-T",
+                "_blank",
+                "noopener,noreferrer"
+              );
             }}
             className="text-muted-foreground hover:text-primary inline-flex items-center justify-center cursor-pointer transition-colors p-2 rounded-md hover:bg-muted/50"
           >
             <Github className="size-6" />
           </a>
-
-          <a
-            href="https://www.linkedin.com/in/darell-thompson-1097691b1/"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn Profile"
-            onClick={(e) => {
-              e.preventDefault();
-              window.open("https://www.linkedin.com/in/darell-thompson-1097691b1/", "_blank", "noopener,noreferrer");
-            }}
-            className="text-muted-foreground hover:text-primary inline-flex items-center justify-center cursor-pointer transition-colors p-2 rounded-md hover:bg-muted/50"
-          >
-            <Linkedin className="size-6" />
-          </a>
         </div>
 
         <span className="text-muted-foreground block text-center text-sm">
-          © {new Date().getFullYear()} StatJunkie. Built by Darell Thompson
+          © {new Date().getFullYear()} StatJunkie. Built by Darell
         </span>
       </div>
     </footer>
