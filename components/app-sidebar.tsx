@@ -19,9 +19,9 @@ import {
 import type { Team, SelectedTeam } from "@/app/types/components";
 
 const userData = {
-  name: "shadcn",
-  email: "m@example.com",
-  avatar: "/avatars/shadcn.jpg",
+  name: "User",
+  email: "user@example.com",
+  avatar: "",
 };
 
 export function AppSidebar({
