@@ -132,7 +132,9 @@ export function AppSidebar({
           <SidebarMenuItem>
             <div className="flex items-center gap-2 px-2 py-3">
               <Trophy className="h-5 w-5 text-yellow-500" />
-              <span className="text-lg font-bold tracking-tight">NBA Standings</span>
+              <span className="text-lg font-bold tracking-tight">
+                NBA Standings
+              </span>
             </div>
           </SidebarMenuItem>
         </SidebarMenu>
