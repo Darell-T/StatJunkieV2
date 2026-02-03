@@ -105,7 +105,7 @@ export default function ScoresPage() {
   return (
     <div className="px-4 lg:px-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold">Today's Games</h2>
+        <h2 className="text-xl font-semibold">Today&apos;s Games</h2>
         {/* Live indicator */}
         <div className="flex items-center gap-2">
           <div
