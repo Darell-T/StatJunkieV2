@@ -1,7 +1,8 @@
-import { redis } from "@/lib/redis";
+import { getRedis } from "@/lib/redis";
 
 export async function POST(req: Request) {
   try {
+    const redis = getRedis();
     const {
       name,
       team,

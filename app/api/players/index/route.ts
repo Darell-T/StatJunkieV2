@@ -1,5 +1,5 @@
 import { buildPlayerIndex } from "@/lib/players-service";
-import { redis } from "@/lib/redis";
+import { getRedis } from "@/lib/redis";
 import { PlayerSummary } from "@/app/types/player";
 
 export async function GET(request: Request) {
@@ -9,6 +9,7 @@ export async function GET(request: Request) {
 
     // 1. Try to fetch the master list from Redis
     const REDIS_KEY = process.env.REDIS_MASTER_LIST!;
+    const redis = getRedis();
     let allPlayers: PlayerSummary[] = [];
 
     try {

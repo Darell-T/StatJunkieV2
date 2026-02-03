@@ -1,4 +1,4 @@
-import { redis } from "@/lib/redis";
+import { getRedis } from "@/lib/redis";
 
 import type {
   CachedPlayer,
@@ -52,6 +52,7 @@ async function fetchWithRetry(url: string, retries = 3): Promise<Response> {
 export async function getCachedPlayer(
   name: string
 ): Promise<CachedPlayer | null> {
+  const redis = getRedis();
   const key = `Player:${name.toLowerCase()}`;
   const cachedPlayer = await redis.get(key);
 
@@ -65,6 +66,7 @@ export async function setCachedPlayer(
   name: string,
   playerData: Player
 ): Promise<void> {
+  const redis = getRedis();
   const key = `Player:${name.toLowerCase()}`;
   await redis.set(key, playerData, { ex: 259200 }); // CACHE FOR 3 DAYS SINCE TEAMS PLAY EVERY 2-3 DAYS(OR EVERYDAY IF YOU ARE ON THE WARRIORS)
 }
